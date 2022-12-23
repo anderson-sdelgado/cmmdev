@@ -5,30 +5,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once('../Conn.class.php');
+require_once('../dbutil/OCI.class.php');
 /**
  * Description of MotoristaDAO
  *
  * @author anderson
  */
-class MotoMecDAO extends Conn {
-    //put your code here
+class MotoMecDAO extends OCI {
     
-    /** @var PDOStatement */
-    private $Read;
-
-    /** @var PDO */
-    private $Conn;
-
     public function dados() {
 
                 $select = "SELECT " 
-                                . " OP.ID AS \"idMotoMec\" "
+                                . " OP.ID AS \"idOperMotoMec\" "
                                 . " , CASE " 
                                     . " WHEN OP.MOTPARADA_ID IS NOT NULL "
                                     . " THEN OP.MOTPARADA_ID "
-                                    . " ELSE 0 END AS \"idOperMotoMec\" "
-                                . " , CARACTER(DOM.DESCR) AS \"descrOperMotoMec\" "
+                                    . " ELSE 0 END AS \"idAtivParOperMotoMec\" "
+                                . " , CARACTER(DOM.DESCR) AS \"descrAtivParOperMotoMec\" "
                                 . " , OP.FUNCAO_COD AS \"codFuncaoOperMotoMec\" "
                                 . " , OP.POSICAO AS \"posOperMotoMec\" "
                                 . " , OP.TIPO AS \"tipoOperMotoMec\" "
@@ -38,7 +31,7 @@ class MotoMecDAO extends Conn {
                                     . " THEN 2 "
                                     . " ELSE 1 END AS \"funcaoOperMotoMec\" "
                             . " FROM " 
-                                . " OPCAO_MOTOMEC OP " 
+                                . " MENU_OPCAO_MOTOMEC OP " 
                                 . " , MOTIVO_PARADA MP "
                                 . " , DESCR_OPCAO_MOTOMEC DOM "
                             . " WHERE " 
@@ -50,14 +43,14 @@ class MotoMecDAO extends Conn {
                                 . " , OP.TIPO "
                                 . " , OP.POSICAO "
                             . " ASC ";
-  
-        $this->Conn = parent::getConn();
-        $this->Read = $this->Conn->prepare($select);
-        $this->Read->setFetchMode(PDO::FETCH_ASSOC);
-        $this->Read->execute();
-        $result = $this->Read->fetchAll();
 
+        $this->Conn = parent::getConn();
+        $statement = oci_parse($this->Conn, $select);
+        oci_execute($statement);
+        oci_fetch_all($statement, $result, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+        oci_free_statement($statement);
         return $result;
+        
     }
     
 }

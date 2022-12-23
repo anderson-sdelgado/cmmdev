@@ -5,21 +5,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once('../Conn.class.php');
+require_once('../dbutil/OCI.class.php');
 /**
  * Description of RFuncaoAtivPar
  *
  * @author anderson
  */
-class RFuncaoAtivParDAO extends Conn  {
-    //put your code here
+class RFuncaoAtivParDAO extends OCI {
     
-    /** @var PDOStatement */
-    private $Read;
-
-    /** @var PDO */
-    private $Conn;
-
     public function dados() {
 
         $select = " SELECT " 
@@ -88,13 +81,12 @@ class RFuncaoAtivParDAO extends Conn  {
                         . " (VALOR FOR FLAG IN "
                         . " (FLAGCHECKLIST, FLAGIMPLEMENTO, FLAGCALIBPNEU, FLAGTROCAMOTORISTA) "
                         . " )";
-        
-        $this->Conn = parent::getConn();
-        $this->Read = $this->Conn->prepare($select);
-        $this->Read->setFetchMode(PDO::FETCH_ASSOC);
-        $this->Read->execute();
-        $result = $this->Read->fetchAll();
 
+        $this->Conn = parent::getConn();
+        $statement = oci_parse($this->Conn, $select);
+        oci_execute($statement);
+        oci_fetch_all($statement, $result, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+        oci_free_statement($statement);
         return $result;
         
     }

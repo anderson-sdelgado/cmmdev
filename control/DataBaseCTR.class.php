@@ -30,7 +30,7 @@ require_once('../model/ROSAtivDAO.class.php');
 require_once('../model/ServicoDAO.class.php');
 require_once('../model/TurnoDAO.class.php');
 
-class BaseControl {
+class DataBaseCTR {
 
     public function dadosAtiv() {
         $atividadeDAO = new AtividadeDAO();
@@ -45,6 +45,14 @@ class BaseControl {
     public function dadosComponente() {
         $componenteDAO = new ComponenteDAO();
         return json_encode($componenteDAO->dados(), JSON_NUMERIC_CHECK);
+    }
+        
+    public function dadosEquip($info) {
+        
+        $dado = $info['nroEquip'];
+        
+        $equipDAO = new EquipDAO();
+        return json_encode($equipDAO->pesq($dado), JSON_NUMERIC_CHECK);
     }
     
     public function dadosEquipSeg() {
@@ -81,10 +89,20 @@ class BaseControl {
         $motoMecDAO = new MotoMecDAO();
         return json_encode($motoMecDAO->dados(), JSON_NUMERIC_CHECK);
     }
-    
+
     public function dadosOS() {
+                
         $osDAO = new OSDAO();
-        return json_encode($osDAO->dados(), JSON_NUMERIC_CHECK);
+        return json_encode($osDAO->dados(), JSON_NUMERIC_CHECK);       
+    }
+        
+    public function pesqOS($info) {
+        
+        $dado = $info['nroOS'];
+        
+        $osDAO = new OSDAO();
+        return json_encode($osDAO->pesq($dado), JSON_NUMERIC_CHECK);
+        
     }
     
     public function dadosParada() {
@@ -117,9 +135,20 @@ class BaseControl {
         return json_encode($rAtivParadaDAO->dados(), JSON_NUMERIC_CHECK);
     }
     
-    public function dadosREquipAtiv() {
+    public function dadosREquipAtiv($info) {
+                
+        $dado = $info['nroEquip'];
+        
         $rEquipAtivDAO = new REquipAtivDAO();
-        return json_encode($rEquipAtivDAO->dados(), JSON_NUMERIC_CHECK);
+        return json_encode($rEquipAtivDAO->pesq($dado), JSON_NUMERIC_CHECK);
+    }
+        
+    public function dadosREquipPneu($info) {
+                
+        $dado = $info['nroEquip'];
+        
+        $rEquipPneuDAO = new REquipPneuDAO();
+        return json_encode($rEquipPneuDAO->pesq($dado), JSON_NUMERIC_CHECK);
     }
     
     public function dadosRFuncaoAtivPar() {
@@ -129,7 +158,15 @@ class BaseControl {
     
     public function dadosROSAtiv() {
         $rOSAtivDAO = new ROSAtivDAO();
-        return json_encode($rOSAtivDAO->dados(), JSON_NUMERIC_CHECK);
+        return json_encode($rOSAtivDAO->dadosECM(), JSON_NUMERIC_CHECK);
+    }
+    
+    public function pesqROSAtiv($info) {
+                        
+        $dado = $info['nroOS'];
+        
+        $rOSAtivDAO = new ROSAtivDAO();
+        return json_encode($rOSAtivDAO->dados($dado), JSON_NUMERIC_CHECK);
     }
     
     public function dadosServico() {

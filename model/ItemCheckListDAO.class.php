@@ -5,21 +5,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once('../Conn.class.php');
+require_once('../dbutil/OCI.class.php');
 /**
  * Description of ItemChecklistDAO
  *
  * @author anderson
  */
-class ItemCheckListDAO extends Conn {
-    //put your code here
-
-    /** @var PDOStatement */
-    private $Read;
-
-    /** @var PDO */
-    private $Conn;
-
+class ItemCheckListDAO extends OCI {
+    
     public function dados() {
 
         $select = " SELECT "
@@ -30,28 +23,28 @@ class ItemCheckListDAO extends Conn {
                         . " V_ITEM_PLANO_CHECK "
                     . " WHERE "
                         . " PROC_OPER IS NOT NULL ";
-
+        
         $this->Conn = parent::getConn();
-        $this->Read = $this->Conn->prepare($select);
-        $this->Read->setFetchMode(PDO::FETCH_ASSOC);
-        $this->Read->execute();
-        $result = $this->Read->fetchAll();
-
+        $statement = oci_parse($this->Conn, $select);
+        oci_execute($statement);
+        oci_fetch_all($statement, $result, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+        oci_free_statement($statement);
         return $result;
+        
     }
 
-    public function atualCheckList($equip, $base) {
+    public function atualCheckList($equip) {
         
-        $sql = " UPDATE USINAS.ATUALIZA_CHECKLIST_MOBILE  "
-                . " SET "
-                . " DT_MOBILE = SYSDATE "
-                . " WHERE "
-                . " EQUIP_NRO = " . $equip;
+        $sql = " UPDATE "
+                        . " USINAS.ATUALIZA_CHECKLIST_MOBILE  "
+                    . " SET "
+                        . " DT_MOBILE = SYSDATE "
+                    . " WHERE "
+                        . " EQUIP_NRO = " . $equip;
 
-        $this->Conn = parent::getConn($base);
-        $this->Create = $this->Conn->prepare($sql);
-        $this->Create->execute();
-        
+        $this->OCI = parent::getConn();
+        $result = oci_parse($this->OCI, $sql);
+        oci_execute($result);
     }
 
 }

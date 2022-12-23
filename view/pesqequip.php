@@ -2,11 +2,11 @@
 
 $info = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
-require_once('../control/BaseControl.class.php');
+require_once('../control/DataBaseCTR.class.php');
 
 if (isset($info)):
 
-    $baseControl = new BaseControl();
-    echo $baseControl->pesqEquip($info);
+    $dataBaseCTR = new DataBaseCTR();
+    echo $dataBaseCTR->pesqEquip($info);
 
 endif;

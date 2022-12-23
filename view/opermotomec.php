@@ -6,4 +6,4 @@ header('Content-type: application/json');
 $body = file_get_contents('php://input');
 
 $dataBaseCTR = new DataBaseCTR();
-echo $dataBaseCTR->dadosROSAtiv();
+echo $dataBaseCTR->dadosMotoMec();

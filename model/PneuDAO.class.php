@@ -5,19 +5,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once('../Conn.class.php');
+require_once('../dbutil/OCI.class.php');
 /**
  * Description of PneuDAO
  *
  * @author anderson
  */
-class PneuDAO extends Conn {
-    //put your code here
-    
-    /** @var PDOStatement */
-    private $Read;
-    /** @var PDO */
-    private $Conn;
+class PneuDAO extends OCI {
     
     public function dados() {
         
@@ -26,13 +20,12 @@ class PneuDAO extends Conn {
                         . " , CD AS \"nroPneu\" "
                     . " FROM "
                         . " VMB_PNEU ";
-        
+
         $this->Conn = parent::getConn();
-        $this->Read = $this->Conn->prepare($select);
-        $this->Read->setFetchMode(PDO::FETCH_ASSOC);
-        $this->Read->execute();
-        $result = $this->Read->fetchAll();
-        
+        $statement = oci_parse($this->Conn, $select);
+        oci_execute($statement);
+        oci_fetch_all($statement, $result, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+        oci_free_statement($statement);
         return $result;
         
     }
@@ -46,13 +39,12 @@ class PneuDAO extends Conn {
                         . " VMB_PNEU "
                     . " WHERE "
                         . " CD LIKE '" . $valor . "'";
-        
+
         $this->Conn = parent::getConn();
-        $this->Read = $this->Conn->prepare($select);
-        $this->Read->setFetchMode(PDO::FETCH_ASSOC);
-        $this->Read->execute();
-        $result = $this->Read->fetchAll();
-        
+        $statement = oci_parse($this->Conn, $select);
+        oci_execute($statement);
+        oci_fetch_all($statement, $result, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+        oci_free_statement($statement);
         return $result;
         
     }

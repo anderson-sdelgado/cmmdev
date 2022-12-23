@@ -5,20 +5,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once('../Conn.class.php');
+require_once('../dbutil/OCI.class.php');
 /**
  * Description of EquipSegDAO
  *
  * @author anderson
  */
-class EquipSegDAO extends Conn {
-    //put your code here
-    
-    /** @var PDOStatement */
-    private $Read;
-
-    /** @var PDO */
-    private $Conn;
+class EquipSegDAO extends OCI {
 
     public function dados() {
 
@@ -47,12 +40,12 @@ class EquipSegDAO extends Conn {
                         . " E.CLASSOPER_CD IN (4, 5, 9, 6, 21, 23, 35, 36, 211, 216, 227)) ";
         
         $this->Conn = parent::getConn();
-        $this->Read = $this->Conn->prepare($select);
-        $this->Read->setFetchMode(PDO::FETCH_ASSOC);
-        $this->Read->execute();
-        $result = $this->Read->fetchAll();
-
+        $statement = oci_parse($this->Conn, $select);
+        oci_execute($statement);
+        oci_fetch_all($statement, $result, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+        oci_free_statement($statement);
         return $result;
+        
     }
     
 }

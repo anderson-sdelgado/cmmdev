@@ -5,19 +5,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once('../Conn.class.php');
+require_once('../dbutil/OCI.class.php');
 /**
  * Description of ComponenteDAO
  *
  * @author anderson
  */
-class ComponenteDAO extends Conn {
-
-    /** @var PDOStatement */
-    private $Read;
-
-    /** @var PDO */
-    private $Conn;
+class ComponenteDAO extends OCI {
 
     public function dados() {
 
@@ -32,12 +26,12 @@ class ComponenteDAO extends Conn {
                 . " ASC ";
 
         $this->Conn = parent::getConn();
-        $this->Read = $this->Conn->prepare($select);
-        $this->Read->setFetchMode(PDO::FETCH_ASSOC);
-        $this->Read->execute();
-        $result = $this->Read->fetchAll();
-
+        $statement = oci_parse($this->Conn, $select);
+        oci_execute($statement);
+        oci_fetch_all($statement, $result, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+        oci_free_statement($statement);
         return $result;
+        
     }
 
 }

@@ -5,20 +5,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once('../Conn.class.php');
+require_once('../dbutil/OCI.class.php');
 /**
  * Description of ProdutoDAO
  *
  * @author anderson
  */
-class ProdutoDAO extends Conn {
-    //put your code here
-
-    /** @var PDOStatement */
-    private $Read;
-
-    /** @var PDO */
-    private $Conn;
+class ProdutoDAO extends OCI {
 
     public function dados() {
 
@@ -32,12 +25,12 @@ class ProdutoDAO extends Conn {
                         . " CD LIKE 'A500207' OR CD LIKE 'A500055' ";
 
         $this->Conn = parent::getConn();
-        $this->Read = $this->Conn->prepare($select);
-        $this->Read->setFetchMode(PDO::FETCH_ASSOC);
-        $this->Read->execute();
-        $result = $this->Read->fetchAll();
-
+        $statement = oci_parse($this->Conn, $select);
+        oci_execute($statement);
+        oci_fetch_all($statement, $result, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+        oci_free_statement($statement);
         return $result;
+        
     }
 
 }

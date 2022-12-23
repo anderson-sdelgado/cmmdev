@@ -1,9 +1,9 @@
 <?php
 
-require_once('../control/BaseControl.class.php');
+require_once('../control/DataBaseCTR.class.php');
 
 header('Content-type: application/json');
 $body = file_get_contents('php://input');
 
-$baseControl = new BaseControl();
-echo $baseControl->dadosComponente();
+$dataBaseCTR = new DataBaseCTR();
+echo $dataBaseCTR->dadosComponente();

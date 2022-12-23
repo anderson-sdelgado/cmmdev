@@ -17,22 +17,24 @@ class Conn {
      * Retorna um objeto PDO!
      */
     private static function Conectar() {
+
         try {
 
             if (self::$Connect == null) {
-                $tns = "(DESCRIPTION = (ENABLE = BROKEN)(FAILOVER = ON)(LOAD_BALANCE = YES)
-                        (ADDRESS = (PROTOCOL = TCP)(HOST = stafe-scan)(PORT = 1521))
-                        (CONNECT_DATA =
-                          (SERVER = DEDICATED)
-                          (SERVICE_NAME = STAFEQA)
-                          (FAILOVER_MODE =
-                            (TYPE = SELECT)
-                            (METHOD = BASIC)
-                            (RETRIES = 180)
-                            (DELAY = 5)
-                           )
-                        )
-                      )";
+
+				$tns = "(DESCRIPTION = (ENABLE = BROKEN)(FAILOVER = ON)(LOAD_BALANCE = YES)
+						(ADDRESS = (PROTOCOL = TCP)(HOST = stafe-scan)(PORT = 1521))
+						(CONNECT_DATA =
+						  (SERVER = DEDICATED)
+						  (SERVICE_NAME = STAFEQA)
+						  (FAILOVER_MODE =
+							(TYPE = SELECT)
+							(METHOD = BASIC)
+							(RETRIES = 180)
+							(DELAY = 5)
+						   )
+						)
+					  )";
 
                 self::$Connect = new PDO("oci:dbname=" . $tns . ';charset=utf8', 'INTERFACE', 'FGBNY946');
             }
